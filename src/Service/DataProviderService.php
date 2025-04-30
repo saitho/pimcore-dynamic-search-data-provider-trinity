@@ -1,10 +1,20 @@
 <?php
 
+/*
+ * This source file is available under two different licenses:
+ *   - GNU General Public License version 3 (GPLv3)
+ *   - DACHCOM Commercial License (DCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) DACHCOM.DIGITAL AG (https://www.dachcom-digital.com)
+ * @license    GPLv3 and DCL
+ */
+
 namespace DsTrinityDataBundle\Service;
 
 use DsTrinityDataBundle\DsTrinityDataBundle;
 use DsTrinityDataBundle\Registry\DataBuilderRegistryInterface;
-use DsTrinityDataBundle\Service\Builder\DataBuilderInterface;
 use DynamicSearchBundle\DynamicSearchEvents;
 use DynamicSearchBundle\Event\ErrorEvent;
 use DynamicSearchBundle\Event\NewDataEvent;
@@ -47,10 +57,6 @@ class DataProviderService implements DataProviderServiceInterface
 
     public function validate(ElementInterface $resource): bool
     {
-        if (!$resource instanceof ElementInterface) {
-            return false;
-        }
-
         $type = $this->getResourceType($resource);
 
         if ($type === null) {
@@ -63,10 +69,6 @@ class DataProviderService implements DataProviderServiceInterface
 
         $builderIdentifier = sprintf('%s_data_builder_identifier', $type);
         $builder = $this->dataBuilderRegistry->getByTypeAndIdentifier($type, $this->indexOptions[$builderIdentifier]);
-
-        if (!$builder instanceof DataBuilderInterface) {
-            return false;
-        }
 
         $options = $this->getTypeOptions($type);
         $element = $builder->buildByIdList((int) $resource->getId(), $options);
@@ -107,12 +109,6 @@ class DataProviderService implements DataProviderServiceInterface
 
         $builder = $this->dataBuilderRegistry->getByTypeAndIdentifier($type, $this->indexOptions[$builderIdentifier]);
 
-        if (!$builder instanceof DataBuilderInterface) {
-            $this->log('error', sprintf('could not resolve data builder for type "%s"', $type));
-
-            return;
-        }
-
         $options = $this->getTypeOptions($type);
         $elements = $builder->buildByList($options);
 
@@ -127,12 +123,6 @@ class DataProviderService implements DataProviderServiceInterface
 
         $builderIdentifier = sprintf('%s_data_builder_identifier', $type);
         $builder = $this->dataBuilderRegistry->getByTypeAndIdentifier($type, $this->indexOptions[$builderIdentifier]);
-
-        if (!$builder instanceof DataBuilderInterface) {
-            $this->log('error', sprintf('could not resolve data builder for type "%s"', $type));
-
-            return;
-        }
 
         $element = $builder->buildById($id);
 

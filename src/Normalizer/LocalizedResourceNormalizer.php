@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * This source file is available under two different licenses:
+ *   - GNU General Public License version 3 (GPLv3)
+ *   - DACHCOM Commercial License (DCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) DACHCOM.DIGITAL AG (https://www.dachcom-digital.com)
+ * @license    GPLv3 and DCL
+ */
+
 namespace DsTrinityDataBundle\Normalizer;
 
 use DynamicSearchBundle\Context\ContextDefinitionInterface;
@@ -35,10 +46,9 @@ class LocalizedResourceNormalizer extends AbstractResourceNormalizer
      */
     protected function normalizeDocument(ContextDefinitionInterface $contextDefinition, ResourceContainerInterface $resourceContainer): array
     {
-        /** @var Document $document */
         $document = $resourceContainer->getResource();
 
-        if (!method_exists($document, 'getProperty')) {
+        if (!$document instanceof Document) {
             return [];
         }
 
@@ -49,7 +59,6 @@ class LocalizedResourceNormalizer extends AbstractResourceNormalizer
         $documentLocale = $document->getProperty('language');
 
         if (empty($documentLocale)) {
-
             if ($this->options['skip_not_localized_documents'] === false) {
                 throw new NormalizerException(sprintf('Cannot determinate locale aware document id "%s": no language property given.', $document->getId()));
             }

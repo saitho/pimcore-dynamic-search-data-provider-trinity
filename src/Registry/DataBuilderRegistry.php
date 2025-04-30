@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * This source file is available under two different licenses:
+ *   - GNU General Public License version 3 (GPLv3)
+ *   - DACHCOM Commercial License (DCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ * @copyright  Copyright (c) DACHCOM.DIGITAL AG (https://www.dachcom-digital.com)
+ * @license    GPLv3 and DCL
+ */
+
 namespace DsTrinityDataBundle\Registry;
 
 use DsTrinityDataBundle\Service\Builder\DataBuilderInterface;
@@ -10,12 +21,6 @@ class DataBuilderRegistry implements DataBuilderRegistryInterface
 
     public function register(DataBuilderInterface $service, string $identifier, string $type): void
     {
-        if (!is_string($type)) {
-            throw new \InvalidArgumentException(
-                sprintf('%s needs to define a valid builder type.', get_class($service))
-            );
-        }
-
         if (!in_array($type, ['document', 'asset', 'object'])) {
             throw new \InvalidArgumentException(
                 sprintf('Invalid builder type "%s. Needs to be one of %s.', $type, implode(', ', ['document', 'asset', 'object']))
